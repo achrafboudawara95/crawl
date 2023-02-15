@@ -1,0 +1,53 @@
+version: '3.4'
+
+services:
+  php:
+    build:
+      context: .
+      target: news_paring_service
+    depends_on:
+      - rabbitmq
+      - db
+    volumes:
+      - ./:/srv
+
+  nginx:
+    build:
+      context: .
+      target: news_paring_service_nginx
+    depends_on:
+      - php
+    volumes:
+      - ./public:/srv/public:ro
+    ports:
+      - "80:80"
+      - "81:8080"
+
+  rabbitmq:
+    build:
+      context: .
+      dockerfile: Dockerfile-rabbitmq
+    hostname: news_paring_service-node-1
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+
+  db:
+    image: mysql:8.0
+    volumes:
+      - "./.mysql-data/db:/var/lib/mysql"
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpw
+      MYSQL_DATABASE: news
+      MYSQL_USER: news
+      MYSQL_PASSWORD: newspw
+
+volumes:
+  db:
+    driver: local
