@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}News List{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">NEWS List</h1>
+    {% if news is empty %}
+        <p>No news found.</p>
+    {% else %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for new in news %}
+                <div class="col">
+                    <div class="card h-100">
+                        <form action="{{ path('delete_news', {'id': new.id}) }}" method="post" class="d-inline">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                        {% if new.image %}
+                            <img src="{{ new.image }}" class="card-img-top" alt="{{ new.title }}" style="object-fit: cover; height: 200px;">
+                        {% endif %}
+                        <div class="card-body">
+                            <h2 class="card-title">{{ new.title }}</h2>
+                            <p class="card-text">{{ new.description }}</p>
+                            <p class="card-text"><small class="text-muted">{{ new.date|date('F j, Y') }}</small></p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            {{ knp_pagination_render(news) }}
+        </div>
+    {% endif %}
+{% endblock %}

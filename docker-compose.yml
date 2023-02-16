@@ -9,7 +9,7 @@ services:
       - rabbitmq
       - db
     volumes:
-      - ./:/srv
+      - ./:/var/www/symfony/
 
   nginx:
     build:
@@ -18,10 +18,9 @@ services:
     depends_on:
       - php
     volumes:
-      - ./public:/srv/public:ro
+      - ./public:/var/www/symfony/public:ro
     ports:
       - "80:80"
-      - "81:8080"
 
   rabbitmq:
     build:

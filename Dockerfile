@@ -3,7 +3,7 @@
 # https://docs.docker.com/compose/compose-file/#target
 
 ARG PHP_VERSION=7.4
-ARG NGINX_VERSION=1.17
+ARG NGINX_VERSION=1.21
 
 # "php" stage
 FROM php:${PHP_VERSION}-fpm-alpine AS news_paring_service
@@ -93,7 +93,7 @@ RUN set -eux; \
 ENV PATH="${PATH}:/root/.composer/vendor/bin"
 
 
-WORKDIR /srv
+WORKDIR /var/www/symfony
 
 RUN composer create-project symfony/skeleton:"^5.4" .
 RUN composer require
@@ -113,11 +113,6 @@ RUN set -eux; \
 	composer dump-env ${APP_ENV}; \
 	rm .env
 
-# copy only specifically what we need
-#COPY bin bin/
-#COPY config config/
-#COPY src src/
-#COPY public public/
 
 RUN set -eux; \
 	mkdir -p var/cache var/log var/sessions; \
@@ -127,7 +122,7 @@ RUN set -eux; \
 	composer run-script --no-dev post-install-cmd; \
 	chmod +x bin/console; \
 	chown -R www-data:www-data . ; sync;
-VOLUME /srv/var
+VOLUME /var/www/symfony/var
 
 COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
@@ -140,8 +135,7 @@ CMD ["php-fpm"]
 FROM nginx:${NGINX_VERSION}-alpine AS news_paring_service_nginx
 
 COPY docker/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
-COPY docker/nginx/conf.d/shell.conf /etc/nginx/conf.d/shell.conf
 
-WORKDIR /srv/public
+WORKDIR /var/www/symfony/public
 
-COPY --from=news_paring_service /srv/public ./
+COPY --from=news_paring_service /var/www/symfony/public ./
