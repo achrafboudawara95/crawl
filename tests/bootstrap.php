@@ -10,15 +10,14 @@ if (file_exists(dirname(__DIR__) . '/config/bootstrap.php')) {
     (new Dotenv())->bootEnv(dirname(__DIR__) . '/.env');
 }
 
-
 passthru(sprintf(
-    'APP_ENV=%s php "%s/../bin/console" doctrine:database:drop --env=test',
+    'APP_ENV=%s php "%s/../bin/console" doctrine:database:create --env=test',
     $_ENV['APP_ENV'],
     __DIR__
 ));
 
 passthru(sprintf(
-    'APP_ENV=%s php "%s/../bin/console" doctrine:database:create --env=test',
+    'APP_ENV=%s php "%s/../bin/console" doctrine:schema:drop --full-database --force --env=test',
     $_ENV['APP_ENV'],
     __DIR__
 ));
