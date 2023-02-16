@@ -8,6 +8,17 @@ use PHPUnit\Framework\TestCase;
 
 class NewsNotificationHandlerTest extends TestCase
 {
+    private ?NewsNotificationHandler $handler;
+    protected function setUp(): void
+    {
+        $this->handler = new NewsNotificationHandler();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->handler = null;
+    }
+
     public function testInvoke()
     {
         $message = new NewsNotification(
@@ -16,9 +27,8 @@ class NewsNotificationHandlerTest extends TestCase
             'image',
             'date'
         );
-        $handler = new NewsNotificationHandler();
 
-        $result = $handler($message);
+        $result = ($this->handler)($message);
 
         $this->assertNull($result);
     }

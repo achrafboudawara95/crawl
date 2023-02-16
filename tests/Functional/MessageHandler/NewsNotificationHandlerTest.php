@@ -11,9 +11,21 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class NewsNotificationHandlerTest extends KernelTestCase
 {
-    public function testInvoke()
+    private $handler;
+    protected function setUp(): void
     {
         self::bootKernel();
+
+        $this->handler = self::getContainer()->get(NewsNotificationHandler::class);
+    }
+
+    protected function tearDown(): void
+    {
+        $this->handler = null;
+    }
+
+    public function testInvoke()
+    {
         // create a mock NewsNotification object to use as the message
         $newsNotification = new NewsNotification(
             'Test news notification',
@@ -22,9 +34,7 @@ class NewsNotificationHandlerTest extends KernelTestCase
             'date'
         );
 
-        $handler = self::getContainer()->get(NewsNotificationHandler::class);
-
-        $handler($newsNotification);
+        ($this->handler)($newsNotification);
 
         // perform additional assertions as necessary
         $this->assertTrue(true);
