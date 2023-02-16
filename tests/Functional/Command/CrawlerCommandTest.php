@@ -2,10 +2,9 @@
 
 namespace App\Tests\Functional\Command;
 
-use App\Entity\News;
 use App\Test\CommandKernelTestCase;
 use App\Test\Traits\LoadMockTrait;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
