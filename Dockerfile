@@ -127,8 +127,13 @@ VOLUME /var/www/symfony/var
 COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-entrypoint
 
+RUN echo "*/10 * * * * root php bin/console app:crawl >> /var/log/cron.log 2>&1" >> /etc/crontabs/root
+
+# Create the log file to be able to run tail
+RUN touch /var/log/cron.log
+
 ENTRYPOINT ["docker-entrypoint"]
-CMD ["php-fpm"]
+CMD ["crond", "php-fpm"]
 
 # "nginx" stage
 # depends on the "php" stage above
