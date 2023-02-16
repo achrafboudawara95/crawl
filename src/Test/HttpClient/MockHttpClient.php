@@ -18,7 +18,7 @@ class MockHttpClient extends SymfonyMockHttpClient
         parent::__construct($this->iterator);
     }
 
-    public function setResponseFactory(array $responses): void
+    public function setResponseFactory($responses): void
     {
         foreach ($responses as $response) {
             $this->iterator->append($response);

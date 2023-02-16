@@ -106,9 +106,9 @@ RUN set -eux; \
 
 RUN apk update && apk add nodejs npm
 
-ENV APP_ENV=prod
-ENV APP_DEBUG=0
-#COPY .env ./
+ENV APP_ENV=dev
+ENV APP_DEBUG=1
+COPY .env ./
 RUN set -eux; \
 	composer dump-env ${APP_ENV}; \
 	rm .env

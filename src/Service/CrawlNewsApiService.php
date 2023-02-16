@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Exception\CrawlException;
+use App\Message\NewsNotification;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -11,6 +12,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class CrawlNewsApiService extends CrawlService
 {
+    const END_POINT = 'top-headlines';
     private string $apiKey;
     private string $country;
     public function __construct(
@@ -30,7 +32,7 @@ class CrawlNewsApiService extends CrawlService
      */
     public function getData(): array
     {
-        $response = $this->httpClient->request('GET', $this->sourceURL, [
+        $response = $this->httpClient->request('GET', $this->sourceURL.self::END_POINT, [
             'query' => [
                 'country' => $this->country,
                 'apiKey' => $this->apiKey
@@ -48,7 +50,17 @@ class CrawlNewsApiService extends CrawlService
 
     private function parseData(string $content): array
     {
-        $data = json_decode($content);
-        return [];
+        $data = json_decode($content, true);
+        $articles = [];
+        foreach ($data['articles'] as $article){
+            $articles[] = new NewsNotification(
+                $article['title'],
+                $article['description'],
+                $article['urlToImage'],
+                $article['publishedAt']
+            );
+        }
+
+        return $articles;
     }
 }

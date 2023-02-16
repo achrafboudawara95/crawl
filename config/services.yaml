@@ -22,3 +22,12 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Command\CrawlerCommand:
+        arguments:
+            $crawlService: '@App\Service\CrawlNewsApiService'
+
+    App\Service\CrawlNewsApiService:
+        arguments:
+            $apiKey: '%env(NEWS_ORG_API_KEY)%'
+            $sourceURL: '%env(NEWS_ORG_URL)%'
+            $country: '%env(NEWS_ORG_COUNTRY)%'
