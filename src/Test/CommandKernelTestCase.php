@@ -14,7 +14,7 @@ class CommandKernelTestCase extends KernelTestCase
 {
     protected ?Command $command;
     protected ?CommandTester $commandTester;
-    protected static $commandName = 'app:command-kernel-test-case';
+    protected static $commandName = '';
 
     protected function setUp(): void
     {

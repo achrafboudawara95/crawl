@@ -4,5 +4,5 @@ namespace App\Service;
 
 interface CrawlInterface
 {
-    public function getData(string $page): array;
+    public function getData(): array;
 }
