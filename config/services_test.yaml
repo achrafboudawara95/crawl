@@ -4,8 +4,8 @@ services:
         autowire: true
         autoconfigure: true
 
-    App\Core\Test\:
-        resource: '../src/Core/Test/*'
+    App\Test\:
+        resource: '../src/Test/*'
           
     # Allowing access to private services
-    Symfony\Contracts\HttpClient\HttpClientInterface: '@App\Core\Test\HttpClient\MockHttpClient'
+    Symfony\Contracts\HttpClient\HttpClientInterface: '@App\Test\HttpClient\MockHttpClient'

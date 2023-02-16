@@ -2,14 +2,27 @@
 
 namespace App\Tests\Functional\Command;
 
+use App\Entity\News;
 use App\Test\CommandKernelTestCase;
+use App\Test\Traits\LoadMockTrait;
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class CrawlerCommandTest extends CommandKernelTestCase
 {
-    protected static $commandName = 'app:crawl';
+    use LoadMockTrait;
 
+    protected static $commandName = 'app:crawl';
     public function testExecute()
     {
+
+        $responses = [
+            new MockResponse($this->loadMock('news.json'), ['http_code' => 200]),
+        ];
+        $client = self::getContainer()->get(HttpClientInterface::class);
+        $client->setResponseFactory($responses);
+
         // execute the command
         $this->commandTester->execute([]);
 

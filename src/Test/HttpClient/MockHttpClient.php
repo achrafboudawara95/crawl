@@ -9,19 +9,14 @@ use Symfony\Component\HttpClient\MockHttpClient as SymfonyMockHttpClient;
 
 class MockHttpClient extends SymfonyMockHttpClient
 {
-    private ArrayIterator $iterator;
-
-    public function __construct()
+    public function setResponses($responses): void
     {
-        $this->iterator = new ArrayIterator();
+        $iterator = new ArrayIterator();
 
-        parent::__construct($this->iterator);
-    }
-
-    public function setResponseFactory($responses): void
-    {
         foreach ($responses as $response) {
-            $this->iterator->append($response);
+            $iterator->append($response);
         }
+
+        $this->setResponseFactory($iterator);
     }
 }
