@@ -14,4 +14,6 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
   fi
 fi
 
+php bin/console messenger:consume async -vv
+
 exec docker-php-entrypoint "$@"

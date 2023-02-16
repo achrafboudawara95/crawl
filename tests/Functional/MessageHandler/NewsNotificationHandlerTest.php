@@ -39,10 +39,19 @@ class NewsNotificationHandlerTest extends KernelTestCase
             '2023-02-16T05:37:55Z'
         );
 
+        $newsNotificationSameTitle = new NewsNotification(
+            'Test news notification',
+            'desc2',
+            'image2',
+            '2023-02-17T05:37:55Z'
+        );
+
         ($this->handler)($newsNotification);
+        ($this->handler)($newsNotificationSameTitle);
 
-        $news = $newsRepository->findOneBy(['title' => $newsNotification->getTitle()]);
+        $news = $newsRepository->findBy(['title' => $newsNotification->getTitle()]);
 
-        $this->assertInstanceOf(News::class, $news);
+        $this->assertCount(1, $news);
+        $this->assertInstanceOf(News::class, $news[0]);
     }
 }
